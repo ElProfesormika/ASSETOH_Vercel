@@ -854,13 +854,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     const navMenu = document.querySelector('.nav-menu');
     
     if (hamburger && navMenu) {
+        console.log('✅ Éléments hamburger trouvés, ajout des event listeners');
+        
         // Event listener pour le clic
         hamburger.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
-            console.log('Menu hamburger cliqué - active:', navMenu.classList.contains('active'));
+            console.log('🍔 Menu hamburger cliqué - active:', navMenu.classList.contains('active'));
         });
         
         // Event listener pour le touch (mobile)
@@ -868,7 +870,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             e.preventDefault();
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
-            console.log('Menu hamburger touché - active:', navMenu.classList.contains('active'));
+            console.log('📱 Menu hamburger touché - active:', navMenu.classList.contains('active'));
+        });
+        
+        // Event listener pour mousedown (pour plus de réactivité)
+        hamburger.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            console.log('🖱️ Menu hamburger mousedown - active:', navMenu.classList.contains('active'));
         });
         
         // Fermer le menu quand on clique sur un lien
@@ -877,7 +887,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             link.addEventListener('click', function() {
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
-                console.log('Menu fermé par clic sur lien');
+                console.log('🔗 Menu fermé par clic sur lien');
             });
         });
         
@@ -886,12 +896,27 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
+                console.log('🚪 Menu fermé par clic extérieur');
             }
         });
         
-        console.log('Event listeners menu hamburger ajoutés avec succès');
+        // Fermer le menu avec la touche Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                console.log('⌨️ Menu fermé par touche Escape');
+            }
+        });
+        
+        console.log('✅ Event listeners menu hamburger ajoutés avec succès');
     } else {
-        console.error('Éléments hamburger ou nav-menu non trouvés:', { hamburger, navMenu });
+        console.error('❌ Éléments hamburger ou nav-menu non trouvés:', { 
+            hamburger: !!hamburger, 
+            navMenu: !!navMenu,
+            hamburgerElement: hamburger,
+            navMenuElement: navMenu
+        });
     }
     
     // Event listeners pour la touche Entrée dans le modal admin
@@ -1024,7 +1049,7 @@ function updateStatistics() {
     const statNumbers = document.querySelectorAll('.stat-number');
     if (statNumbers.length >= 3) {
         // Membres actifs
-        const oldMembers = parseInt(statNumbers[0].textContent) || 0;
+        const oldMembers = parseInt(statNumbers[0].textContent.replace('+', '')) || 0;
         statNumbers[0].textContent = totalMembers + '+';
         if (totalMembers !== oldMembers) {
             statNumbers[0].style.animation = 'numberChange 0.5s ease-in-out';
@@ -1032,7 +1057,7 @@ function updateStatistics() {
         }
         
         // Événements annuels
-        const oldEvents = parseInt(statNumbers[1].textContent) || 0;
+        const oldEvents = parseInt(statNumbers[1].textContent.replace('+', '')) || 0;
         statNumbers[1].textContent = totalEvents + '+';
         if (totalEvents !== oldEvents) {
             statNumbers[1].style.animation = 'numberChange 0.5s ease-in-out';
@@ -1043,7 +1068,7 @@ function updateStatistics() {
         statNumbers[2].textContent = yearsExperience + '+';
     }
     
-    console.log(`Statistiques mises à jour: ${totalMembers} membres, ${totalEvents} événements, ${yearsExperience} années`);
+    console.log(`📊 Statistiques mises à jour: ${totalMembers} membres, ${totalEvents} événements, ${yearsExperience} années`);
 }
 
 // Fonction pour recalculer les statistiques après ajout/suppression
