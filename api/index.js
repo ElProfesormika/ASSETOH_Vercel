@@ -134,13 +134,5 @@ app.put('/api/socialLinks', (req, res) => {
     res.json({ success: true, message: 'Liens sociaux sauvegardés' });
 });
 
-// Servir les fichiers statiques depuis public
-app.use(express.static(path.join(__dirname, '..', 'public')));
-
-// Route principale et toutes les autres routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
-});
-
 // Export pour Vercel
 module.exports = app;
