@@ -1,0 +1,33 @@
+{
+  "name": "assetoh-website",
+  "version": "1.0.0",
+  "description": "Site web officiel de l'ASSETOH - Association des Étudiants Togolais au Havre",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p $PORT -o",
+    "dev": "npx http-server -p 3000 -o",
+    "build": "echo 'Build completed'",
+    "test": "echo 'No tests specified'"
+  },
+  "keywords": [
+    "assetoh",
+    "togo",
+    "association",
+    "students",
+    "havre",
+    "website"
+  ],
+  "author": "ASSETOH",
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ElProfesormika/ASSETOH.git"
+  },
+  "homepage": "https://assetoh-website.railway.app"
+}
