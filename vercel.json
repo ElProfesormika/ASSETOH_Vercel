@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "assetoh-website",
+  "name": "assetoh-association",
   "builds": [
     {
       "src": "server.js",

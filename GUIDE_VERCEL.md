@@ -62,7 +62,7 @@
 - [ ] Statistiques dynamiques
 
 ### URLs :
-- **Site principal** : `https://assetoh-vercel.vercel.app`
+- **Site principal** : `https://assetoh-association.vercel.app`
 - **Dashboard Vercel** : `https://vercel.com/dashboard`
 
 ## 🎉 Résultat Final
