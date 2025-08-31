@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 });
 
 // Configuration JSON Server
-const jsonServerRouter = jsonServer.router('db.json');
+const jsonServerRouter = jsonServer.router(path.join(__dirname, '..', 'db.json'));
 const middlewares = jsonServer.defaults();
 
 // Utiliser les middlewares JSON Server
@@ -40,11 +40,11 @@ app.use(middlewares);
 app.use('/api', jsonServerRouter);
 
 // Servir les fichiers statiques
-app.use(express.static(__dirname, {
+app.use(express.static(path.join(__dirname, '..'), {
     etag: false,
     lastModified: false,
-    setHeaders: (res, path) => {
-        if (path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.html')) {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.js') || filePath.endsWith('.css') || filePath.endsWith('.html')) {
             res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         }
     }
@@ -52,14 +52,19 @@ app.use(express.static(__dirname, {
 
 // Route principale
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
-// Démarrer le serveur
-app.listen(PORT, () => {
-    console.log(`🚀 Serveur ASSETOH démarré sur le port ${PORT}`);
-    console.log(`📱 URL: http://localhost:${PORT}`);
-    console.log(`🌐 Prêt pour le déploiement !`);
-    console.log(`📊 API JSON Server disponible sur /api`);
-    console.log(`🗄️ Base de données: db.json`);
-});
+// Pour Vercel serverless functions
+module.exports = app;
+
+// Pour le développement local
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`🚀 Serveur ASSETOH démarré sur le port ${PORT}`);
+        console.log(`📱 URL: http://localhost:${PORT}`);
+        console.log(`🌐 Prêt pour le déploiement !`);
+        console.log(`📊 API JSON Server disponible sur /api`);
+        console.log(`🗄️ Base de données: db.json`);
+    });
+}
