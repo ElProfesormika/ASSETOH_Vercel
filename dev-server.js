@@ -1,8 +1,6 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const { MongoClient } = require('mongodb');
-require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,16 +17,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// Configuration MongoDB
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/assetoh_db';
-const DB_NAME = 'assetoh_db';
-const COLLECTION_NAME = 'website_data';
-
-let client;
-let db;
-
-// Données par défaut
-const defaultData = {
+// Données en mémoire avec persistance locale
+let websiteData = {
     members: {
         'bureau-executif': [],
         'conseillers': []
@@ -50,60 +40,22 @@ const defaultData = {
     }
 };
 
-// Connexion MongoDB
-async function connectToMongoDB() {
-    try {
-        client = new MongoClient(MONGODB_URI);
-        await client.connect();
-        db = client.db(DB_NAME);
-        console.log('✅ Connecté à MongoDB Atlas');
-        
-        // Initialiser les données si la collection est vide
-        const collection = db.collection(COLLECTION_NAME);
-        const count = await collection.countDocuments();
-        if (count === 0) {
-            await collection.insertOne({ _id: 'website_data', ...defaultData });
-            console.log('📝 Données initiales créées');
-        }
-    } catch (error) {
-        console.error('❌ Erreur MongoDB:', error);
-        console.log('🔄 Utilisation du mode fallback local');
-        // Fallback vers les données par défaut
-    }
-}
-
 // Fonction pour récupérer les données
 async function getData() {
-    try {
-        if (!db) return defaultData;
-        const collection = db.collection(COLLECTION_NAME);
-        const data = await collection.findOne({ _id: 'website_data' });
-        return data || defaultData;
-    } catch (error) {
-        console.error('❌ Erreur récupération données:', error);
-        return defaultData;
-    }
+    return websiteData;
 }
 
 // Fonction pour sauvegarder les données
 async function saveData(data) {
     try {
-        if (!db) return false;
-        const collection = db.collection(COLLECTION_NAME);
-        await collection.updateOne(
-            { _id: 'website_data' },
-            { $set: data },
-            { upsert: true }
-        );
+        websiteData = data;
+        console.log('✅ Données sauvegardées en mémoire');
         return true;
     } catch (error) {
-        console.error('❌ Erreur sauvegarde données:', error);
+        console.error('❌ Erreur sauvegarde:', error);
         return false;
     }
 }
-
-// Connexion au démarrage
-connectToMongoDB();
 
 // Routes API
 
