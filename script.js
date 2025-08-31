@@ -503,7 +503,7 @@ function closeEventForm() {
 }
 
 // Fonction pour ajouter un événement
-function addEvent(event) {
+async function addEvent(event) {
     event.preventDefault();
     
     const formData = {
@@ -516,12 +516,17 @@ function addEvent(event) {
     };
     
     events.push(formData);
-    localStorage.setItem('assetoh-events', JSON.stringify(events));
     
-    closeEventForm();
-    displayEvents();
-    recalculateStatistics(); // Mettre à jour les statistiques
-    showNotification('Événement ajouté avec succès !', 'success');
+    // Sauvegarder sur le serveur
+    const saved = await saveEventsToServer();
+    if (saved) {
+        closeEventForm();
+        displayEvents();
+        recalculateStatistics(); // Mettre à jour les statistiques
+        showNotification('Événement ajouté avec succès !', 'success');
+    } else {
+        showNotification('Erreur lors de la sauvegarde', 'error');
+    }
 }
 
 // Fonction pour afficher les événements
@@ -573,7 +578,7 @@ function displayEvents() {
 }
 
 // Fonction pour supprimer un événement
-function deleteEvent(id) {
+async function deleteEvent(id) {
     const eventTitle = events.find(event => event.id === id)?.title || 'cet événement';
     
     if (confirm(`Êtes-vous sûr de vouloir supprimer "${eventTitle}" ?\n\nCette action est irréversible.`)) {
@@ -584,18 +589,26 @@ function deleteEvent(id) {
             card.style.opacity = '0';
             card.style.transition = 'all 0.3s ease';
             
-            setTimeout(() => {
+            setTimeout(async () => {
                 events = events.filter(event => event.id !== id);
-                localStorage.setItem('assetoh-events', JSON.stringify(events));
-                displayEvents();
-                recalculateStatistics(); // Mettre à jour les statistiques
-                showNotification(`"${eventTitle}" a été supprimé avec succès !`, 'success');
+                const saved = await saveEventsToServer();
+                if (saved) {
+                    displayEvents();
+                    recalculateStatistics(); // Mettre à jour les statistiques
+                    showNotification(`"${eventTitle}" a été supprimé avec succès !`, 'success');
+                } else {
+                    showNotification('Erreur lors de la sauvegarde', 'error');
+                }
             }, 300);
         } else {
             events = events.filter(event => event.id !== id);
-            localStorage.setItem('assetoh-events', JSON.stringify(events));
-            displayEvents();
-            showNotification(`"${eventTitle}" a été supprimé avec succès !`, 'success');
+            const saved = await saveEventsToServer();
+            if (saved) {
+                displayEvents();
+                showNotification(`"${eventTitle}" a été supprimé avec succès !`, 'success');
+            } else {
+                showNotification('Erreur lors de la sauvegarde', 'error');
+            }
         }
     }
 }
@@ -713,7 +726,7 @@ function displayCultureContent() {
 }
 
 // Fonction pour supprimer du contenu culturel
-function deleteCultureContent(id) {
+async function deleteCultureContent(id) {
     const cultureTitle = cultureContent.find(item => item.id === id)?.title || 'ce contenu culturel';
     
     if (confirm(`Êtes-vous sûr de vouloir supprimer "${cultureTitle}" ?\n\nCette action est irréversible.`)) {
@@ -724,17 +737,25 @@ function deleteCultureContent(id) {
             card.style.opacity = '0';
             card.style.transition = 'all 0.3s ease';
             
-            setTimeout(() => {
+            setTimeout(async () => {
                 cultureContent = cultureContent.filter(item => item.id !== id);
-                localStorage.setItem('assetoh-culture', JSON.stringify(cultureContent));
-                displayCultureContent();
-                showNotification(`"${cultureTitle}" a été supprimé avec succès !`, 'success');
+                const saved = await saveCultureToServer();
+                if (saved) {
+                    displayCultureContent();
+                    showNotification(`"${cultureTitle}" a été supprimé avec succès !`, 'success');
+                } else {
+                    showNotification('Erreur lors de la sauvegarde', 'error');
+                }
             }, 300);
         } else {
             cultureContent = cultureContent.filter(item => item.id !== id);
-            localStorage.setItem('assetoh-culture', JSON.stringify(cultureContent));
-            displayCultureContent();
-            showNotification(`"${cultureTitle}" a été supprimé avec succès !`, 'success');
+            const saved = await saveCultureToServer();
+            if (saved) {
+                displayCultureContent();
+                showNotification(`"${cultureTitle}" a été supprimé avec succès !`, 'success');
+            } else {
+                showNotification('Erreur lors de la sauvegarde', 'error');
+            }
         }
     }
 }
@@ -1067,6 +1088,54 @@ let socialLinks = {
     youtube: ''
 };
 
+// Fonction pour sauvegarder les informations de contact sur le serveur
+async function saveContactToServer() {
+    try {
+        const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(contactInfo)
+        });
+        
+        if (response.ok) {
+            console.log('✅ Informations de contact sauvegardées sur le serveur');
+            return true;
+        } else {
+            console.error('❌ Erreur lors de la sauvegarde des informations de contact');
+            return false;
+        }
+    } catch (error) {
+        console.error('❌ Erreur réseau lors de la sauvegarde:', error);
+        return false;
+    }
+}
+
+// Fonction pour sauvegarder les liens sociaux sur le serveur
+async function saveSocialToServer() {
+    try {
+        const response = await fetch('/api/social', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(socialLinks)
+        });
+        
+        if (response.ok) {
+            console.log('✅ Liens sociaux sauvegardés sur le serveur');
+            return true;
+        } else {
+            console.error('❌ Erreur lors de la sauvegarde des liens sociaux');
+            return false;
+        }
+    } catch (error) {
+        console.error('❌ Erreur réseau lors de la sauvegarde:', error);
+        return false;
+    }
+}
+
 // Fonction pour charger les informations de contact depuis localStorage
 function loadContactInfo() {
     const savedContactInfo = localStorage.getItem('assetoh-contact-info');
@@ -1155,16 +1224,20 @@ function closeEditContactModal() {
 }
 
 // Fonction pour sauvegarder les modifications des informations de contact
-function saveContactInfo() {
+async function saveContactInfo() {
     const type = document.getElementById('editContactValue').dataset.type;
     const newValue = document.getElementById('editContactValue').value.trim();
     
     if (newValue) {
         contactInfo[type] = newValue;
-        localStorage.setItem('assetoh-contact-info', JSON.stringify(contactInfo));
-        updateContactDisplay();
-        closeEditContactModal();
-        showNotification('Information de contact mise à jour avec succès !', 'success');
+        const saved = await saveContactToServer();
+        if (saved) {
+            updateContactDisplay();
+            closeEditContactModal();
+            showNotification('Information de contact mise à jour avec succès !', 'success');
+        } else {
+            showNotification('Erreur lors de la sauvegarde', 'error');
+        }
     } else {
         showNotification('Veuillez saisir une valeur valide.', 'error');
     }
@@ -1187,7 +1260,7 @@ function closeEditSocialModal() {
 }
 
 // Fonction pour sauvegarder les modifications des liens sociaux
-function saveSocialLinks(event) {
+async function saveSocialLinks(event) {
     event.preventDefault();
     
     socialLinks.facebook = document.getElementById('editSocialFacebook').value.trim();
@@ -1195,10 +1268,14 @@ function saveSocialLinks(event) {
     socialLinks.linkedin = document.getElementById('editSocialLinkedin').value.trim();
     socialLinks.youtube = document.getElementById('editSocialYoutube').value.trim();
     
-    localStorage.setItem('assetoh-social-links', JSON.stringify(socialLinks));
-    updateSocialLinksDisplay();
-    closeEditSocialModal();
-    showNotification('Liens sociaux mis à jour avec succès !', 'success');
+    const saved = await saveSocialToServer();
+    if (saved) {
+        updateSocialLinksDisplay();
+        closeEditSocialModal();
+        showNotification('Liens sociaux mis à jour avec succès !', 'success');
+    } else {
+        showNotification('Erreur lors de la sauvegarde', 'error');
+    }
 }
 
 // Variables pour l'édition
@@ -1229,7 +1306,7 @@ function closeEditMemberModal() {
 }
 
 // Fonction pour sauvegarder les modifications d'un membre
-function saveMemberEdit(event) {
+async function saveMemberEdit(event) {
     event.preventDefault();
     
     if (!editingMemberId) return;
@@ -1271,22 +1348,25 @@ function updateMemberData(member, newType, newPhoto) {
     // Supprimer l'ancien membre
     const { type, id } = editingMemberId;
     members[type] = members[type].filter(m => m.id !== id);
-    localStorage.setItem(`assetoh-${type}`, JSON.stringify(members[type]));
     
     // Ajouter le membre mis à jour dans la nouvelle section si nécessaire
     if (newType !== type) {
         if (!members[newType]) members[newType] = [];
         members[newType].push(updatedMember);
-        localStorage.setItem(`assetoh-${newType}`, JSON.stringify(members[newType]));
     } else {
         members[type].push(updatedMember);
-        localStorage.setItem(`assetoh-${type}`, JSON.stringify(members[type]));
     }
     
-    displayMembers();
-    recalculateStatistics();
-    closeEditMemberModal();
-    showNotification('Membre modifié avec succès !', 'success');
+    // Sauvegarder sur le serveur
+    const saved = await saveMembersToServer();
+    if (saved) {
+        displayMembers();
+        recalculateStatistics();
+        closeEditMemberModal();
+        showNotification('Membre modifié avec succès !', 'success');
+    } else {
+        showNotification('Erreur lors de la sauvegarde', 'error');
+    }
 }
 
 // Fonction pour éditer un événement
@@ -1313,7 +1393,7 @@ function closeEditEventModal() {
 }
 
 // Fonction pour sauvegarder les modifications d'un événement
-function saveEventEdit(event) {
+async function saveEventEdit(event) {
     event.preventDefault();
     
     if (!editingEventId) return;
@@ -1330,11 +1410,15 @@ function saveEventEdit(event) {
         description: document.getElementById('editEventDescription').value
     };
     
-    localStorage.setItem('assetoh-events', JSON.stringify(events));
-    displayEvents();
-    recalculateStatistics();
-    closeEditEventModal();
-    showNotification('Événement modifié avec succès !', 'success');
+    const saved = await saveEventsToServer();
+    if (saved) {
+        displayEvents();
+        recalculateStatistics();
+        closeEditEventModal();
+        showNotification('Événement modifié avec succès !', 'success');
+    } else {
+        showNotification('Erreur lors de la sauvegarde', 'error');
+    }
 }
 
 // Fonction pour éditer un contenu culturel
@@ -1360,7 +1444,7 @@ function closeEditCultureModal() {
 }
 
 // Fonction pour sauvegarder les modifications d'un contenu culturel
-function saveCultureEdit(event) {
+async function saveCultureEdit(event) {
     event.preventDefault();
     
     if (!editingCultureId) return;
@@ -1424,7 +1508,7 @@ function sendEmail(formType, formData) {
 
 
 // Fonction pour mettre à jour les données du contenu culturel
-function updateCultureData(itemIndex, newImage) {
+async function updateCultureData(itemIndex, newImage) {
     cultureContent[itemIndex] = {
         ...cultureContent[itemIndex],
         title: document.getElementById('editCultureTitle').value,
@@ -1434,8 +1518,12 @@ function updateCultureData(itemIndex, newImage) {
         image: newImage
     };
     
-    localStorage.setItem('assetoh-culture', JSON.stringify(cultureContent));
-    displayCultureContent();
-    closeEditCultureModal();
-    showNotification('Contenu culturel modifié avec succès !', 'success');
+    const saved = await saveCultureToServer();
+    if (saved) {
+        displayCultureContent();
+        closeEditCultureModal();
+        showNotification('Contenu culturel modifié avec succès !', 'success');
+    } else {
+        showNotification('Erreur lors de la sauvegarde', 'error');
+    }
 }

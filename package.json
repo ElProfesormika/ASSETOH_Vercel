@@ -20,7 +20,7 @@
   "author": "ASSETOH",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "4.21.2"
   },
   "engines": {
     "node": ">=16.0.0"
