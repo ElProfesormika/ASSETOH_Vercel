@@ -1069,9 +1069,9 @@ function updateStatistics() {
     // Calculer le nombre d'événements
     const totalEvents = events.length;
     
-    // Calculer le nombre d'années d'expérience (depuis 2020 par exemple)
+    // Calculer le nombre d'années d'expérience (depuis 2023)
     const currentYear = new Date().getFullYear();
-    const startYear = 2020; // Année de création de l'association
+    const startYear = 2023; // Année de création de l'association ASSETOH
     const yearsExperience = currentYear - startYear;
     
     console.log(`📈 Calculs: ${totalMembers} membres, ${totalEvents} événements, ${yearsExperience} années`);
