@@ -610,6 +610,12 @@ function deleteCultureContent(id) {
 // Initialisation au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page chargée, initialisation...');
+    console.log('Version du script: 1.1');
+    
+    // Vérifier que les éléments sont présents
+    const hamburgerCheck = document.querySelector('.hamburger');
+    const navMenuCheck = document.querySelector('.nav-menu');
+    console.log('Éléments trouvés:', { hamburger: !!hamburgerCheck, navMenu: !!navMenuCheck });
     
     // Réinitialiser le statut admin (toujours déconnecté par défaut)
     resetAdminStatus();
@@ -710,10 +716,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const navMenu = document.querySelector('.nav-menu');
     
     if (hamburger && navMenu) {
-        hamburger.addEventListener('click', function() {
+        // Event listener pour le clic
+        hamburger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
-            console.log('Menu hamburger cliqué');
+            console.log('Menu hamburger cliqué - active:', navMenu.classList.contains('active'));
+        });
+        
+        // Event listener pour le touch (mobile)
+        hamburger.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            console.log('Menu hamburger touché - active:', navMenu.classList.contains('active'));
         });
         
         // Fermer le menu quand on clique sur un lien
@@ -722,10 +739,21 @@ document.addEventListener('DOMContentLoaded', function() {
             link.addEventListener('click', function() {
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
+                console.log('Menu fermé par clic sur lien');
             });
         });
         
-        console.log('Event listeners menu hamburger ajoutés');
+        // Fermer le menu quand on clique en dehors
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+        
+        console.log('Event listeners menu hamburger ajoutés avec succès');
+    } else {
+        console.error('Éléments hamburger ou nav-menu non trouvés:', { hamburger, navMenu });
     }
     
     // Event listeners pour la touche Entrée dans le modal admin
