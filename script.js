@@ -274,7 +274,12 @@ async function loadDataFromServer() {
             displayCultureContent();
             updateContactDisplay();
             updateSocialLinksDisplay();
-            updateStatistics();
+            
+            // Mettre à jour les statistiques avec un délai pour s'assurer que le DOM est prêt
+            setTimeout(() => {
+                updateStatistics();
+                console.log('📊 Statistiques mises à jour après chargement des données');
+            }, 100);
             
             console.log('✅ Données chargées depuis le serveur');
         } else {
@@ -849,75 +854,97 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.log('Event listener edit social form ajouté');
     }
     
-    // Event listener pour le menu hamburger mobile
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-menu');
-    
-    if (hamburger && navMenu) {
-        console.log('✅ Éléments hamburger trouvés, ajout des event listeners');
+    // Event listener pour le menu hamburger mobile - Version robuste
+    function initHamburgerMenu() {
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
         
-        // Event listener pour le clic
-        hamburger.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
-            console.log('🍔 Menu hamburger cliqué - active:', navMenu.classList.contains('active'));
-        });
-        
-        // Event listener pour le touch (mobile)
-        hamburger.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
-            console.log('📱 Menu hamburger touché - active:', navMenu.classList.contains('active'));
-        });
-        
-        // Event listener pour mousedown (pour plus de réactivité)
-        hamburger.addEventListener('mousedown', function(e) {
-            e.preventDefault();
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
-            console.log('🖱️ Menu hamburger mousedown - active:', navMenu.classList.contains('active'));
-        });
-        
-        // Fermer le menu quand on clique sur un lien
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-                console.log('🔗 Menu fermé par clic sur lien');
-            });
-        });
-        
-        // Fermer le menu quand on clique en dehors
-        document.addEventListener('click', function(e) {
-            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-                console.log('🚪 Menu fermé par clic extérieur');
-            }
-        });
-        
-        // Fermer le menu avec la touche Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-                console.log('⌨️ Menu fermé par touche Escape');
-            }
-        });
-        
-        console.log('✅ Event listeners menu hamburger ajoutés avec succès');
-    } else {
-        console.error('❌ Éléments hamburger ou nav-menu non trouvés:', { 
+        console.log('🔍 Recherche des éléments hamburger:', { 
             hamburger: !!hamburger, 
-            navMenu: !!navMenu,
-            hamburgerElement: hamburger,
-            navMenuElement: navMenu
+            navMenu: !!navMenu 
         });
+        
+        if (hamburger && navMenu) {
+            console.log('✅ Éléments hamburger trouvés, initialisation...');
+            
+            // Fonction pour basculer le menu
+            function toggleMenu() {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+                console.log('🍔 Menu basculé - active:', navMenu.classList.contains('active'));
+            }
+            
+            // Fonction pour fermer le menu
+            function closeMenu() {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                console.log('🚪 Menu fermé');
+            }
+            
+            // Event listeners multiples pour une meilleure compatibilité
+            hamburger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleMenu();
+            });
+            
+            hamburger.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                toggleMenu();
+            });
+            
+            // Fermer le menu quand on clique sur un lien
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+            
+            // Fermer le menu quand on clique en dehors
+            document.addEventListener('click', function(e) {
+                if (navMenu.classList.contains('active') && 
+                    !hamburger.contains(e.target) && 
+                    !navMenu.contains(e.target)) {
+                    closeMenu();
+                }
+            });
+            
+            // Fermer avec Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+            
+            console.log('✅ Menu hamburger initialisé avec succès');
+        } else {
+            console.error('❌ Éléments hamburger non trouvés, retry dans 1 seconde...');
+            setTimeout(initHamburgerMenu, 1000);
+        }
     }
+    
+    // Initialiser le menu hamburger
+    initHamburgerMenu();
+    
+    // Test des fonctionnalités après 2 secondes
+    setTimeout(() => {
+        console.log('🧪 Test des fonctionnalités...');
+        
+        // Test du menu hamburger
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        console.log('🍔 Test hamburger:', { hamburger: !!hamburger, navMenu: !!navMenu });
+        
+        // Test des statistiques
+        const statNumbers = document.querySelectorAll('.stat-number');
+        console.log('📊 Test statistiques:', { count: statNumbers.length, elements: statNumbers });
+        
+        // Test des données
+        console.log('📋 Test données:', { 
+            members: members, 
+            events: events.length, 
+            culture: cultureContent.length 
+        });
+    }, 2000);
     
     // Event listeners pour la touche Entrée dans le modal admin
     const adminEmail = document.getElementById('adminEmail');
@@ -1034,6 +1061,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // Fonction pour mettre à jour les statistiques
 function updateStatistics() {
+    console.log('🔄 Début de la mise à jour des statistiques...');
+    
     // Calculer le nombre total de membres
     const totalMembers = (members['bureau-executif']?.length || 0) + (members['conseillers']?.length || 0);
     
@@ -1045,12 +1074,17 @@ function updateStatistics() {
     const startYear = 2020; // Année de création de l'association
     const yearsExperience = currentYear - startYear;
     
+    console.log(`📈 Calculs: ${totalMembers} membres, ${totalEvents} événements, ${yearsExperience} années`);
+    
     // Mettre à jour les statistiques dans le DOM
     const statNumbers = document.querySelectorAll('.stat-number');
+    console.log(`🔍 Éléments stat-number trouvés: ${statNumbers.length}`);
+    
     if (statNumbers.length >= 3) {
         // Membres actifs
         const oldMembers = parseInt(statNumbers[0].textContent.replace('+', '')) || 0;
         statNumbers[0].textContent = totalMembers + '+';
+        console.log(`👥 Membres: ${oldMembers} → ${totalMembers}`);
         if (totalMembers !== oldMembers) {
             statNumbers[0].style.animation = 'numberChange 0.5s ease-in-out';
             setTimeout(() => statNumbers[0].style.animation = '', 500);
@@ -1059,6 +1093,7 @@ function updateStatistics() {
         // Événements annuels
         const oldEvents = parseInt(statNumbers[1].textContent.replace('+', '')) || 0;
         statNumbers[1].textContent = totalEvents + '+';
+        console.log(`📅 Événements: ${oldEvents} → ${totalEvents}`);
         if (totalEvents !== oldEvents) {
             statNumbers[1].style.animation = 'numberChange 0.5s ease-in-out';
             setTimeout(() => statNumbers[1].style.animation = '', 500);
@@ -1066,9 +1101,12 @@ function updateStatistics() {
         
         // Années d'expérience
         statNumbers[2].textContent = yearsExperience + '+';
+        console.log(`⏰ Expérience: ${yearsExperience} années`);
+    } else {
+        console.error('❌ Pas assez d\'éléments stat-number trouvés');
     }
     
-    console.log(`📊 Statistiques mises à jour: ${totalMembers} membres, ${totalEvents} événements, ${yearsExperience} années`);
+    console.log(`✅ Statistiques mises à jour: ${totalMembers} membres, ${totalEvents} événements, ${yearsExperience} années`);
 }
 
 // Fonction pour recalculer les statistiques après ajout/suppression
@@ -1350,18 +1388,18 @@ async function saveMemberEdit(event) {
     
     if (photoFile) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = async function(e) {
             newPhoto = e.target.result;
-            updateMemberData(member, newType, newPhoto);
+            await updateMemberData(member, newType, newPhoto);
         };
         reader.readAsDataURL(photoFile);
     } else {
-        updateMemberData(member, newType, newPhoto);
+        await updateMemberData(member, newType, newPhoto);
     }
 }
 
 // Fonction pour mettre à jour les données du membre
-function updateMemberData(member, newType, newPhoto) {
+async function updateMemberData(member, newType, newPhoto) {
     const updatedMember = {
         ...member,
         name: document.getElementById('editMemberName').value,
@@ -1483,13 +1521,13 @@ async function saveCultureEdit(event) {
     
     if (imageFile) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = async function(e) {
             newImage = e.target.result;
-            updateCultureData(itemIndex, newImage);
+            await updateCultureData(itemIndex, newImage);
         };
         reader.readAsDataURL(imageFile);
     } else {
-        updateCultureData(itemIndex, newImage);
+        await updateCultureData(itemIndex, newImage);
     }
 }
 
