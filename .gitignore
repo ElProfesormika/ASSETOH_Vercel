@@ -1,0 +1,26 @@
+# Fichiers de données dynamiques
+data.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dépendances
+node_modules/
+
+# Fichiers temporaires
+*.tmp
+*.temp
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers d'environnement
+.env
+.env.local
+.env.production
+
+# Fichiers de backup
+*.backup
+*_backup.*

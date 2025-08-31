@@ -241,9 +241,75 @@ function closeCultureForm() {
 
 // Gestion des membres
 let members = {
-    'bureau-executif': JSON.parse(localStorage.getItem('assetoh-bureau-executif')) || [],
-    'conseillers': JSON.parse(localStorage.getItem('assetoh-conseillers')) || []
+    'bureau-executif': [],
+    'conseillers': []
 };
+
+// Fonction pour charger les données depuis le serveur
+async function loadDataFromServer() {
+    try {
+        const response = await fetch('/api/data');
+        if (response.ok) {
+            const data = await response.json();
+            members = data.members || { 'bureau-executif': [], 'conseillers': [] };
+            events = data.events || [];
+            cultureContent = data.cultureContent || [];
+            contactInfo = data.contactInfo || {
+                address: 'Le Havre, France',
+                email: 'franceassetoh228@gmail.com',
+                phone: '+33 1 23 45 67 89',
+                facebook: 'https://facebook.com/assetoh',
+                instagram: 'https://instagram.com/assetoh'
+            };
+            socialLinks = data.socialLinks || {
+                facebook: 'https://facebook.com/assetoh',
+                instagram: 'https://instagram.com/assetoh',
+                linkedin: 'https://linkedin.com/company/assetoh',
+                youtube: 'https://youtube.com/@assetoh'
+            };
+            
+            // Afficher les données
+            displayMembers();
+            displayEvents();
+            displayCultureContent();
+            updateContactDisplay();
+            updateSocialLinksDisplay();
+            updateStatistics();
+            
+            console.log('✅ Données chargées depuis le serveur');
+        } else {
+            console.error('❌ Erreur lors du chargement des données');
+            showNotification('Erreur lors du chargement des données', 'error');
+        }
+    } catch (error) {
+        console.error('❌ Erreur réseau:', error);
+        showNotification('Erreur de connexion au serveur', 'error');
+    }
+}
+
+// Fonction pour sauvegarder les membres sur le serveur
+async function saveMembersToServer() {
+    try {
+        const response = await fetch('/api/members', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(members)
+        });
+        
+        if (response.ok) {
+            console.log('✅ Membres sauvegardés sur le serveur');
+            return true;
+        } else {
+            console.error('❌ Erreur lors de la sauvegarde des membres');
+            return false;
+        }
+    } catch (error) {
+        console.error('❌ Erreur réseau lors de la sauvegarde:', error);
+        return false;
+    }
+}
 
 // Fonction pour ouvrir le formulaire d'ajout de membre
 function openMemberForm(type) {
@@ -261,7 +327,7 @@ function closeMemberForm() {
 }
 
 // Fonction pour ajouter un membre
-function addMember(event) {
+async function addMember(event) {
     event.preventDefault();
     
     const modal = document.getElementById('memberModal');
@@ -283,7 +349,7 @@ function addMember(event) {
 }
 
 // Fonction pour sauvegarder un membre
-function saveMember(type, photoData) {
+async function saveMember(type, photoData) {
     const formData = {
         id: Date.now(),
         name: document.getElementById('memberName').value,
@@ -293,12 +359,17 @@ function saveMember(type, photoData) {
     };
     
     members[type].push(formData);
-    localStorage.setItem(`assetoh-${type}`, JSON.stringify(members[type]));
     
-    closeMemberForm();
-    displayMembers();
-    recalculateStatistics(); // Mettre à jour les statistiques
-    showNotification('Membre ajouté avec succès !', 'success');
+    // Sauvegarder sur le serveur
+    const saved = await saveMembersToServer();
+    if (saved) {
+        closeMemberForm();
+        displayMembers();
+        recalculateStatistics(); // Mettre à jour les statistiques
+        showNotification('Membre ajouté avec succès !', 'success');
+    } else {
+        showNotification('Erreur lors de la sauvegarde', 'error');
+    }
 }
 
 // Fonction pour afficher les membres
@@ -355,7 +426,7 @@ function displayMembers() {
 }
 
 // Fonction pour supprimer un membre
-function deleteMember(type, id) {
+async function deleteMember(type, id) {
     const memberName = members[type].find(member => member.id === id)?.name || 'ce membre';
     
     if (confirm(`Êtes-vous sûr de vouloir supprimer ${memberName} ?\n\nCette action est irréversible.`)) {
@@ -366,24 +437,56 @@ function deleteMember(type, id) {
             card.style.opacity = '0';
             card.style.transition = 'all 0.3s ease';
             
-            setTimeout(() => {
+            setTimeout(async () => {
                 members[type] = members[type].filter(member => member.id !== id);
-                localStorage.setItem(`assetoh-${type}`, JSON.stringify(members[type]));
-                displayMembers();
-                recalculateStatistics(); // Mettre à jour les statistiques
-                showNotification(`${memberName} a été supprimé avec succès !`, 'success');
+                const saved = await saveMembersToServer();
+                if (saved) {
+                    displayMembers();
+                    recalculateStatistics(); // Mettre à jour les statistiques
+                    showNotification(`${memberName} a été supprimé avec succès !`, 'success');
+                } else {
+                    showNotification('Erreur lors de la sauvegarde', 'error');
+                }
             }, 300);
         } else {
             members[type] = members[type].filter(member => member.id !== id);
-            localStorage.setItem(`assetoh-${type}`, JSON.stringify(members[type]));
-            displayMembers();
-            showNotification(`${memberName} a été supprimé avec succès !`, 'success');
+            const saved = await saveMembersToServer();
+            if (saved) {
+                displayMembers();
+                showNotification(`${memberName} a été supprimé avec succès !`, 'success');
+            } else {
+                showNotification('Erreur lors de la sauvegarde', 'error');
+            }
         }
     }
 }
 
 // Gestion des événements
-let events = JSON.parse(localStorage.getItem('assetoh-events')) || [];
+let events = [];
+
+// Fonction pour sauvegarder les événements sur le serveur
+async function saveEventsToServer() {
+    try {
+        const response = await fetch('/api/events', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(events)
+        });
+        
+        if (response.ok) {
+            console.log('✅ Événements sauvegardés sur le serveur');
+            return true;
+        } else {
+            console.error('❌ Erreur lors de la sauvegarde des événements');
+            return false;
+        }
+    } catch (error) {
+        console.error('❌ Erreur réseau lors de la sauvegarde:', error);
+        return false;
+    }
+}
 
 // Fonction pour ouvrir le formulaire d'ajout d'événement
 function openEventForm() {
@@ -498,10 +601,34 @@ function deleteEvent(id) {
 }
 
 // Gestion du contenu culturel
-let cultureContent = JSON.parse(localStorage.getItem('assetoh-culture')) || [];
+let cultureContent = [];
+
+// Fonction pour sauvegarder le contenu culturel sur le serveur
+async function saveCultureToServer() {
+    try {
+        const response = await fetch('/api/culture', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(cultureContent)
+        });
+        
+        if (response.ok) {
+            console.log('✅ Contenu culturel sauvegardé sur le serveur');
+            return true;
+        } else {
+            console.error('❌ Erreur lors de la sauvegarde du contenu culturel');
+            return false;
+        }
+    } catch (error) {
+        console.error('❌ Erreur réseau lors de la sauvegarde:', error);
+        return false;
+    }
+}
 
 // Fonction pour ajouter du contenu culturel
-function addCultureContent(event) {
+async function addCultureContent(event) {
     event.preventDefault();
     
     const imageFile = document.getElementById('cultureImage').files[0];
@@ -520,7 +647,7 @@ function addCultureContent(event) {
 }
 
 // Fonction pour sauvegarder le contenu culturel
-function saveCultureContent(imageData) {
+async function saveCultureContent(imageData) {
     const formData = {
         id: Date.now(),
         title: document.getElementById('cultureTitle').value,
@@ -532,11 +659,16 @@ function saveCultureContent(imageData) {
     };
     
     cultureContent.push(formData);
-    localStorage.setItem('assetoh-culture', JSON.stringify(cultureContent));
     
-    closeCultureForm();
-    displayCultureContent();
-    showNotification('Contenu culturel ajouté avec succès !', 'success');
+    // Sauvegarder sur le serveur
+    const saved = await saveCultureToServer();
+    if (saved) {
+        closeCultureForm();
+        displayCultureContent();
+        showNotification('Contenu culturel ajouté avec succès !', 'success');
+    } else {
+        showNotification('Erreur lors de la sauvegarde', 'error');
+    }
 }
 
 // Fonction pour afficher le contenu culturel
@@ -608,7 +740,7 @@ function deleteCultureContent(id) {
 }
 
 // Initialisation au chargement de la page
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     console.log('Page chargée, initialisation...');
     console.log('Version du script: 1.1');
     
@@ -623,23 +755,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Vérifier le statut admin
     checkAdminStatus();
     
-    // Afficher le contenu culturel
-    displayCultureContent();
-    
-    // Afficher les membres
-    displayMembers();
-    
-    // Afficher les événements
-    displayEvents();
-    
-    // Mettre à jour les statistiques
-    updateStatistics();
-    
-    // Charger les informations de contact
-    loadContactInfo();
-    
-    // Charger les liens sociaux
-    loadSocialLinks();
+    // Charger les données depuis le serveur
+    await loadDataFromServer();
     
     // Event listeners pour les formulaires
     const cultureForm = document.getElementById('cultureForm');
