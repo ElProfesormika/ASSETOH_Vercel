@@ -705,6 +705,29 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Event listener edit social form ajouté');
     }
     
+    // Event listener pour le menu hamburger mobile
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            console.log('Menu hamburger cliqué');
+        });
+        
+        // Fermer le menu quand on clique sur un lien
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+        
+        console.log('Event listeners menu hamburger ajoutés');
+    }
+    
     // Event listeners pour la touche Entrée dans le modal admin
     const adminEmail = document.getElementById('adminEmail');
     const adminPassword = document.getElementById('adminPassword');

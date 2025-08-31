@@ -144,6 +144,19 @@ body {
     transition: var(--transition);
 }
 
+/* Animation du hamburger */
+.hamburger.active .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
 /* Hero Section */
 .hero {
     min-height: 100vh;
@@ -1965,6 +1978,7 @@ small {
     }
     .hamburger {
         display: flex;
+        z-index: 1000;
     }
 
     .nav-menu {
@@ -1975,13 +1989,26 @@ small {
         background-color: var(--white);
         width: 100%;
         text-align: center;
-        transition: 0.3s;
+        transition: 0.3s ease-in-out;
         box-shadow: var(--shadow);
         padding: 2rem 0;
+        z-index: 999;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
     }
 
     .nav-menu.active {
         left: 0;
+    }
+
+    .nav-menu li {
+        margin: 1rem 0;
+    }
+
+    .nav-menu .nav-link {
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        display: block;
     }
 
     .hero-content {
