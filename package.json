@@ -4,8 +4,8 @@
   "description": "Site web officiel de l'ASSETOH - Association des Étudiants Togolais au Havre",
   "main": "api/server.js",
   "scripts": {
-    "start": "node api/server.js",
-    "dev": "node api/server.js",
+    "start": "node dev-server.js",
+    "dev": "node dev-server.js",
     "build": "echo 'Build completed'",
     "test": "echo 'No tests specified'"
   },

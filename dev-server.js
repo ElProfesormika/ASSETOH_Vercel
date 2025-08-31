@@ -3,6 +3,7 @@ const path = require('path');
 const jsonServer = require('json-server');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Middleware pour parser JSON
 app.use(express.json({ limit: '50mb' }));
@@ -17,7 +18,7 @@ app.use((req, res, next) => {
 });
 
 // Configuration JSON Server
-const jsonServerRouter = jsonServer.router(path.join(__dirname, '..', 'db.json'));
+const jsonServerRouter = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults();
 
 // Utiliser les middlewares JSON Server
@@ -27,12 +28,18 @@ app.use(middlewares);
 app.use('/api', jsonServerRouter);
 
 // Servir les fichiers statiques depuis public
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.static('public'));
 
 // Route principale
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Export pour Vercel
-module.exports = app;
+// Démarrer le serveur
+app.listen(PORT, () => {
+    console.log(`🚀 Serveur ASSETOH démarré sur le port ${PORT}`);
+    console.log(`📱 URL: http://localhost:${PORT}`);
+    console.log(`🌐 Prêt pour le déploiement !`);
+    console.log(`📊 API JSON Server disponible sur /api`);
+    console.log(`🗄️ Base de données: db.json`);
+});
