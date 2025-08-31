@@ -248,44 +248,47 @@ let members = {
 // Fonction pour charger les données depuis le serveur
 async function loadDataFromServer() {
     try {
-        const response = await fetch('/api/data');
-        if (response.ok) {
-            const data = await response.json();
-            members = data.members || { 'bureau-executif': [], 'conseillers': [] };
-            events = data.events || [];
-            cultureContent = data.cultureContent || [];
-            contactInfo = data.contactInfo || {
-                address: 'Le Havre, France',
-                email: 'franceassetoh228@gmail.com',
-                phone: '+33 1 23 45 67 89',
-                facebook: 'https://facebook.com/assetoh',
-                instagram: 'https://instagram.com/assetoh'
-            };
-            socialLinks = data.socialLinks || {
-                facebook: 'https://facebook.com/assetoh',
-                instagram: 'https://instagram.com/assetoh',
-                linkedin: 'https://linkedin.com/company/assetoh',
-                youtube: 'https://youtube.com/@assetoh'
-            };
-            
-            // Afficher les données
-            displayMembers();
-            displayEvents();
-            displayCultureContent();
-            updateContactDisplay();
-            updateSocialLinksDisplay();
-            
-            // Mettre à jour les statistiques avec un délai pour s'assurer que le DOM est prêt
-            setTimeout(() => {
-                updateStatistics();
-                console.log('📊 Statistiques mises à jour après chargement des données');
-            }, 100);
-            
-            console.log('✅ Données chargées depuis le serveur');
-        } else {
-            console.error('❌ Erreur lors du chargement des données');
-            showNotification('Erreur lors du chargement des données', 'error');
-        }
+        // Charger chaque section séparément depuis JSON Server
+        const [membersResponse, eventsResponse, cultureResponse, contactResponse, socialResponse] = await Promise.all([
+            fetch('/api/members'),
+            fetch('/api/events'),
+            fetch('/api/cultureContent'),
+            fetch('/api/contactInfo'),
+            fetch('/api/socialLinks')
+        ]);
+        
+        // Mettre à jour les variables globales
+        members = await membersResponse.json() || { 'bureau-executif': [], 'conseillers': [] };
+        events = await eventsResponse.json() || [];
+        cultureContent = await cultureResponse.json() || [];
+        contactInfo = await contactResponse.json() || {
+            address: 'Le Havre, France',
+            email: 'franceassetoh228@gmail.com',
+            phone: '+33 1 23 45 67 89',
+            facebook: 'https://facebook.com/assetoh',
+            instagram: 'https://instagram.com/assetoh'
+        };
+        socialLinks = await socialResponse.json() || {
+            facebook: 'https://facebook.com/assetoh',
+            instagram: 'https://instagram.com/assetoh',
+            linkedin: 'https://linkedin.com/company/assetoh',
+            youtube: 'https://youtube.com/@assetoh'
+        };
+        
+        // Afficher les données
+        displayMembers();
+        displayEvents();
+        displayCultureContent();
+        updateContactDisplay();
+        updateSocialLinksDisplay();
+        
+        // Mettre à jour les statistiques avec un délai pour s'assurer que le DOM est prêt
+        setTimeout(() => {
+            updateStatistics();
+            console.log('📊 Statistiques mises à jour après chargement des données');
+        }, 100);
+        
+        console.log('✅ Données chargées depuis JSON Server');
     } catch (error) {
         console.error('❌ Erreur réseau:', error);
         showNotification('Erreur de connexion au serveur', 'error');
@@ -296,7 +299,7 @@ async function loadDataFromServer() {
 async function saveMembersToServer() {
     try {
         const response = await fetch('/api/members', {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -304,7 +307,7 @@ async function saveMembersToServer() {
         });
         
         if (response.ok) {
-            console.log('✅ Membres sauvegardés sur le serveur');
+            console.log('✅ Membres sauvegardés sur JSON Server');
             return true;
         } else {
             console.error('❌ Erreur lors de la sauvegarde des membres');
@@ -473,7 +476,7 @@ let events = [];
 async function saveEventsToServer() {
     try {
         const response = await fetch('/api/events', {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -481,7 +484,7 @@ async function saveEventsToServer() {
         });
         
         if (response.ok) {
-            console.log('✅ Événements sauvegardés sur le serveur');
+            console.log('✅ Événements sauvegardés sur JSON Server');
             return true;
         } else {
             console.error('❌ Erreur lors de la sauvegarde des événements');
@@ -624,8 +627,8 @@ let cultureContent = [];
 // Fonction pour sauvegarder le contenu culturel sur le serveur
 async function saveCultureToServer() {
     try {
-        const response = await fetch('/api/culture', {
-            method: 'POST',
+        const response = await fetch('/api/cultureContent', {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -633,7 +636,7 @@ async function saveCultureToServer() {
         });
         
         if (response.ok) {
-            console.log('✅ Contenu culturel sauvegardé sur le serveur');
+            console.log('✅ Contenu culturel sauvegardé sur JSON Server');
             return true;
         } else {
             console.error('❌ Erreur lors de la sauvegarde du contenu culturel');
@@ -1154,8 +1157,8 @@ let socialLinks = {
 // Fonction pour sauvegarder les informations de contact sur le serveur
 async function saveContactToServer() {
     try {
-        const response = await fetch('/api/contact', {
-            method: 'POST',
+        const response = await fetch('/api/contactInfo', {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -1163,7 +1166,7 @@ async function saveContactToServer() {
         });
         
         if (response.ok) {
-            console.log('✅ Informations de contact sauvegardées sur le serveur');
+            console.log('✅ Informations de contact sauvegardées sur JSON Server');
             return true;
         } else {
             console.error('❌ Erreur lors de la sauvegarde des informations de contact');
@@ -1178,8 +1181,8 @@ async function saveContactToServer() {
 // Fonction pour sauvegarder les liens sociaux sur le serveur
 async function saveSocialToServer() {
     try {
-        const response = await fetch('/api/social', {
-            method: 'POST',
+        const response = await fetch('/api/socialLinks', {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -1187,7 +1190,7 @@ async function saveSocialToServer() {
         });
         
         if (response.ok) {
-            console.log('✅ Liens sociaux sauvegardés sur le serveur');
+            console.log('✅ Liens sociaux sauvegardés sur JSON Server');
             return true;
         } else {
             console.error('❌ Erreur lors de la sauvegarde des liens sociaux');

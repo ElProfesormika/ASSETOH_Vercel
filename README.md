@@ -32,7 +32,9 @@ Site web professionnel et moderne pour l'ASSETOH, présentant l'association, ses
 - **HTML5** : Structure sémantique
 - **CSS3** : Design responsive et animations avancées
 - **JavaScript ES6+** : Interactivité et gestion des données
-- **LocalStorage** : Stockage local des données
+- **Node.js** : Serveur backend
+- **Express.js** : Framework web
+- **JSON Server** : Base de données et API REST
 - **EmailJS** : Envoi direct d'emails depuis le navigateur
 - **FileReader API** : Upload et gestion d'images
 
@@ -75,10 +77,17 @@ Site web professionnel et moderne pour l'ASSETOH, présentant l'association, ses
 
 ## 🚀 Installation et Utilisation
 
-1. **Télécharger** les fichiers du projet
-2. **Ouvrir** `index.html` dans un navigateur
-3. **Naviguer** dans les différentes sections
-4. **Mode Admin** : Cliquer sur l'icône ⚙️ et se connecter
+### **Développement Local**
+1. **Cloner** le repository : `git clone https://github.com/ElProfesormika/ASSETOH_Vercel.git`
+2. **Installer** les dépendances : `npm install`
+3. **Démarrer** le serveur : `npm start`
+4. **Ouvrir** http://localhost:3000 dans un navigateur
+5. **Mode Admin** : Cliquer sur l'icône ⚙️ et se connecter
+
+### **Déploiement Vercel**
+1. **Connecter** le repository GitHub à Vercel
+2. **Déployer** automatiquement
+3. **Accéder** au site en ligne
 
 ### 🔑 **Accès Administrateur**
 - **Email** : `franceassetoh228@gmail.com`
@@ -91,9 +100,13 @@ ASSETOH_WEB_SITE/
 ├── index.html                    # Page principale
 ├── styles.css                    # Styles et design
 ├── script.js                     # Fonctionnalités JavaScript
+├── server.js                     # Serveur Node.js + JSON Server
+├── db.json                       # Base de données JSON
+├── package.json                  # Configuration Node.js
+├── vercel.json                   # Configuration Vercel
 ├── assetoh_logo.jpeg             # Logo officiel
 ├── GUIDE_ADMINISTRATION.md       # Guide d'utilisation admin
-├── GUIDE_EMAILJS.md              # Configuration EmailJS
+├── GUIDE_VERCEL.md               # Guide de déploiement Vercel
 └── README.md                     # Ce fichier
 ```
 

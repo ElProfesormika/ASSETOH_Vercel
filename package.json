@@ -20,16 +20,15 @@
   "author": "ASSETOH",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "16.6.1",
     "express": "^4.18.2",
-    "mongodb": "6.19.0"
+    "json-server": "0.17.4"
   },
   "engines": {
     "node": ">=16.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ElProfesormika/ASSETOH.git"
+    "url": "https://github.com/ElProfesormika/ASSETOH_Vercel.git"
   },
-  "homepage": "https://assetoh-website.vercel.app"
+  "homepage": "https://assetoh-vercel.vercel.app"
 }
