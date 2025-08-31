@@ -17,8 +17,14 @@ app.use((req, res, next) => {
     next();
 });
 
-// Données en mémoire avec persistance locale
-let websiteData = {
+// Configuration GitHub pour développement local
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const GITHUB_REPO = 'ElProfesormika/ASSETOH_Vercel';
+const GITHUB_BRANCH = 'main';
+const DATA_FILE_PATH = 'data.json';
+
+// Données par défaut
+const defaultData = {
     members: {
         'bureau-executif': [],
         'conseillers': []
@@ -40,19 +46,87 @@ let websiteData = {
     }
 };
 
-// Fonction pour récupérer les données
+// Fonction pour récupérer les données depuis GitHub
 async function getData() {
-    return websiteData;
+    try {
+        if (!GITHUB_TOKEN) {
+            console.log('⚠️ Pas de token GitHub, utilisation des données par défaut');
+            return defaultData;
+        }
+
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${DATA_FILE_PATH}?ref=${GITHUB_BRANCH}`, {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        if (response.ok) {
+            const fileData = await response.json();
+            const content = Buffer.from(fileData.content, 'base64').toString('utf8');
+            const data = JSON.parse(content);
+            console.log('✅ Données récupérées depuis GitHub');
+            return data;
+        } else {
+            console.log('⚠️ Fichier non trouvé, utilisation des données par défaut');
+            return defaultData;
+        }
+    } catch (error) {
+        console.error('❌ Erreur récupération GitHub:', error);
+        return defaultData;
+    }
 }
 
-// Fonction pour sauvegarder les données
+// Fonction pour sauvegarder les données sur GitHub
 async function saveData(data) {
     try {
-        websiteData = data;
-        console.log('✅ Données sauvegardées en mémoire');
-        return true;
+        if (!GITHUB_TOKEN) {
+            console.log('⚠️ Pas de token GitHub, sauvegarde en mémoire uniquement');
+            return true;
+        }
+
+        // Récupérer le SHA du fichier actuel
+        const getResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${DATA_FILE_PATH}?ref=${GITHUB_BRANCH}`, {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        let sha = null;
+        if (getResponse.ok) {
+            const fileData = await getResponse.json();
+            sha = fileData.sha;
+        }
+
+        // Mettre à jour le fichier
+        const content = JSON.stringify(data, null, 2);
+        const encodedContent = Buffer.from(content).toString('base64');
+
+        const updateResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${DATA_FILE_PATH}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: `Mise à jour des données du site - ${new Date().toISOString()}`,
+                content: encodedContent,
+                branch: GITHUB_BRANCH,
+                sha: sha
+            })
+        });
+
+        if (updateResponse.ok) {
+            console.log('✅ Données sauvegardées sur GitHub');
+            return true;
+        } else {
+            console.error('❌ Erreur sauvegarde GitHub:', await updateResponse.text());
+            return false;
+        }
     } catch (error) {
-        console.error('❌ Erreur sauvegarde:', error);
+        console.error('❌ Erreur sauvegarde GitHub:', error);
         return false;
     }
 }
