@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const { MongoClient } = require('mongodb');
+require('dotenv').config();
 
 const app = express();
 
@@ -16,8 +18,16 @@ app.use((req, res, next) => {
     next();
 });
 
-// Données en mémoire (pour Vercel)
-let inMemoryData = {
+// Configuration MongoDB
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/assetoh_db';
+const DB_NAME = 'assetoh_db';
+const COLLECTION_NAME = 'website_data';
+
+let client;
+let db;
+
+// Données par défaut
+const defaultData = {
     members: {
         'bureau-executif': [],
         'conseillers': []
@@ -39,99 +49,200 @@ let inMemoryData = {
     }
 };
 
-// Fonction pour charger les données
-function loadData() {
+// Connexion MongoDB
+async function connectToMongoDB() {
     try {
-        const dbPath = path.join(__dirname, '..', 'db.json');
-        if (fs.existsSync(dbPath)) {
-            const data = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
-            inMemoryData = { ...inMemoryData, ...data };
+        client = new MongoClient(MONGODB_URI);
+        await client.connect();
+        db = client.db(DB_NAME);
+        console.log('✅ Connecté à MongoDB Atlas');
+        
+        // Initialiser les données si la collection est vide
+        const collection = db.collection(COLLECTION_NAME);
+        const count = await collection.countDocuments();
+        if (count === 0) {
+            await collection.insertOne({ _id: 'website_data', ...defaultData });
+            console.log('📝 Données initiales créées');
         }
     } catch (error) {
-        console.log('Utilisation des données par défaut');
+        console.error('❌ Erreur MongoDB:', error);
+        // Fallback vers les données par défaut
+    }
+}
+
+// Fonction pour récupérer les données
+async function getData() {
+    try {
+        if (!db) return defaultData;
+        const collection = db.collection(COLLECTION_NAME);
+        const data = await collection.findOne({ _id: 'website_data' });
+        return data || defaultData;
+    } catch (error) {
+        console.error('❌ Erreur récupération données:', error);
+        return defaultData;
     }
 }
 
 // Fonction pour sauvegarder les données
-function saveData() {
+async function saveData(data) {
     try {
-        const dbPath = path.join(__dirname, '..', 'db.json');
-        fs.writeFileSync(dbPath, JSON.stringify(inMemoryData, null, 2));
+        if (!db) return false;
+        const collection = db.collection(COLLECTION_NAME);
+        await collection.updateOne(
+            { _id: 'website_data' },
+            { $set: data },
+            { upsert: true }
+        );
         return true;
     } catch (error) {
-        console.log('Sauvegarde en mémoire uniquement (Vercel)');
+        console.error('❌ Erreur sauvegarde données:', error);
         return false;
     }
 }
 
-// Charger les données au démarrage
-loadData();
+// Connexion au démarrage
+connectToMongoDB();
 
 // Routes API
 
 // GET - Récupérer toutes les données
-app.get('/api/data', (req, res) => {
-    res.json(inMemoryData);
+app.get('/api/data', async (req, res) => {
+    try {
+        const data = await getData();
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
 });
 
 // GET - Récupérer les membres
-app.get('/api/members', (req, res) => {
-    res.json(inMemoryData.members);
+app.get('/api/members', async (req, res) => {
+    try {
+        const data = await getData();
+        res.json(data.members);
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
 });
 
 // PUT - Sauvegarder les membres
-app.put('/api/members', (req, res) => {
-    inMemoryData.members = req.body;
-    saveData();
-    res.json({ success: true, message: 'Membres sauvegardés' });
+app.put('/api/members', async (req, res) => {
+    try {
+        const data = await getData();
+        data.members = req.body;
+        const success = await saveData(data);
+        if (success) {
+            res.json({ success: true, message: 'Membres sauvegardés' });
+        } else {
+            res.status(500).json({ error: 'Erreur de sauvegarde' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
 });
 
 // GET - Récupérer les événements
-app.get('/api/events', (req, res) => {
-    res.json(inMemoryData.events);
+app.get('/api/events', async (req, res) => {
+    try {
+        const data = await getData();
+        res.json(data.events);
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
 });
 
 // PUT - Sauvegarder les événements
-app.put('/api/events', (req, res) => {
-    inMemoryData.events = req.body;
-    saveData();
-    res.json({ success: true, message: 'Événements sauvegardés' });
+app.put('/api/events', async (req, res) => {
+    try {
+        const data = await getData();
+        data.events = req.body;
+        const success = await saveData(data);
+        if (success) {
+            res.json({ success: true, message: 'Événements sauvegardés' });
+        } else {
+            res.status(500).json({ error: 'Erreur de sauvegarde' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
 });
 
 // GET - Récupérer le contenu culturel
-app.get('/api/cultureContent', (req, res) => {
-    res.json(inMemoryData.cultureContent);
+app.get('/api/cultureContent', async (req, res) => {
+    try {
+        const data = await getData();
+        res.json(data.cultureContent);
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
 });
 
 // PUT - Sauvegarder le contenu culturel
-app.put('/api/cultureContent', (req, res) => {
-    inMemoryData.cultureContent = req.body;
-    saveData();
-    res.json({ success: true, message: 'Contenu culturel sauvegardé' });
+app.put('/api/cultureContent', async (req, res) => {
+    try {
+        const data = await getData();
+        data.cultureContent = req.body;
+        const success = await saveData(data);
+        if (success) {
+            res.json({ success: true, message: 'Contenu culturel sauvegardé' });
+        } else {
+            res.status(500).json({ error: 'Erreur de sauvegarde' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
 });
 
 // GET - Récupérer les infos de contact
-app.get('/api/contactInfo', (req, res) => {
-    res.json(inMemoryData.contactInfo);
+app.get('/api/contactInfo', async (req, res) => {
+    try {
+        const data = await getData();
+        res.json(data.contactInfo);
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
 });
 
 // PUT - Sauvegarder les infos de contact
-app.put('/api/contactInfo', (req, res) => {
-    inMemoryData.contactInfo = req.body;
-    saveData();
-    res.json({ success: true, message: 'Infos de contact sauvegardées' });
+app.put('/api/contactInfo', async (req, res) => {
+    try {
+        const data = await getData();
+        data.contactInfo = req.body;
+        const success = await saveData(data);
+        if (success) {
+            res.json({ success: true, message: 'Infos de contact sauvegardées' });
+        } else {
+            res.status(500).json({ error: 'Erreur de sauvegarde' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
 });
 
 // GET - Récupérer les liens sociaux
-app.get('/api/socialLinks', (req, res) => {
-    res.json(inMemoryData.socialLinks);
+app.get('/api/socialLinks', async (req, res) => {
+    try {
+        const data = await getData();
+        res.json(data.socialLinks);
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
 });
 
 // PUT - Sauvegarder les liens sociaux
-app.put('/api/socialLinks', (req, res) => {
-    inMemoryData.socialLinks = req.body;
-    saveData();
-    res.json({ success: true, message: 'Liens sociaux sauvegardés' });
+app.put('/api/socialLinks', async (req, res) => {
+    try {
+        const data = await getData();
+        data.socialLinks = req.body;
+        const success = await saveData(data);
+        if (success) {
+            res.json({ success: true, message: 'Liens sociaux sauvegardés' });
+        } else {
+            res.status(500).json({ error: 'Erreur de sauvegarde' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur serveur' });
+    }
 });
 
 // Export pour Vercel
