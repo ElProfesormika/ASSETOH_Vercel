@@ -20,7 +20,9 @@
   "author": "ASSETOH",
   "license": "MIT",
   "dependencies": {
-    "express": "4.21.2"
+    "dotenv": "16.6.1",
+    "express": "^4.18.2",
+    "mongodb": "6.19.0"
   },
   "engines": {
     "node": ">=16.0.0"
@@ -29,5 +31,5 @@
     "type": "git",
     "url": "https://github.com/ElProfesormika/ASSETOH.git"
   },
-  "homepage": "https://assetoh-website.railway.app"
+  "homepage": "https://assetoh-website.vercel.app"
 }
