@@ -40,7 +40,7 @@ app.use(middlewares);
 app.use('/api', jsonServerRouter);
 
 // Servir les fichiers statiques
-app.use(express.static(path.join(__dirname, '..'), {
+app.use(express.static(path.join(__dirname, '..', 'public'), {
     etag: false,
     lastModified: false,
     setHeaders: (res, filePath) => {
@@ -52,7 +52,7 @@ app.use(express.static(path.join(__dirname, '..'), {
 
 // Route principale
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 // Pour Vercel serverless functions

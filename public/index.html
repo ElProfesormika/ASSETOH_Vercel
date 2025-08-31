@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASSETOH - Association des Etudiants Togolais au Havre</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="assetoh_logo.jpeg">
+    <link rel="apple-touch-icon" href="assetoh_logo.jpeg">
+    <link rel="manifest" href="site.webmanifest">
+    
+    <link rel="stylesheet" href="styles.css?v=1.1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="assetoh_logo.jpeg" alt="ASSETOH Logo" class="logo-image">
+                <div class="logo-text">
+                    <h2>ASSETOH</h2>
+                    <span>Association des Etudiants Togolais au Havre</span>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#accueil" class="nav-link">Accueil</a></li>
+                <li><a href="#presentation" class="nav-link">Présentation</a></li>
+                <li><a href="#actions" class="nav-link">Nos Actions</a></li>
+                <li><a href="#objectifs" class="nav-link">Nos Objectifs</a></li>
+                <li><a href="#conseil" class="nav-link">Conseil d'Administration</a></li>
+                <li><a href="#culture" class="nav-link">Culture du Togo</a></li>
+                <li><a href="#adhesion" class="nav-link">Adhésion</a></li>
+                <li><a href="#evenements" class="nav-link">Événements</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="#" class="nav-link admin-link" onclick="toggleAdminMode()" title="Mode Administration"><i class="fas fa-cog"></i></a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Section Accueil -->
+    <section id="accueil" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Bienvenue à l'ASSETOH</h1>
+                <h2>Association des Etudiants Togolais au Havre</h2>
+                <p>Consolidons ensemble les liens de fraternité, d'entraide et promouvons l'entente entre les membres</p>
+                <div class="hero-buttons">
+                    <a href="#adhesion" class="btn btn-primary">Devenir Membre</a>
+                    <a href="#presentation" class="btn btn-secondary">En savoir plus</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="flag-container">
+                    <div class="togo-flag">
+                        <div class="flag-canton">
+                            <div class="flag-star">★</div>
+                        </div>
+                        <div class="flag-stripes">
+                            <div class="flag-stripe green"></div>
+                            <div class="flag-stripe yellow"></div>
+                            <div class="flag-stripe green"></div>
+                            <div class="flag-stripe yellow"></div>
+                            <div class="flag-stripe green"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Présentation -->
+    <section id="presentation" class="section">
+        <div class="container">
+            <h2 class="section-title">Présentation de l'ASSETOH</h2>
+            <div class="presentation-content">
+                <div class="presentation-text">
+                    <h3>Qui sommes-nous ?</h3>
+                    <p>L'ASSETOH est une association qui a pour but de consolider les liens de fraternité, d'entraide et de promouvoir l'entente entre les membres. Notre mission est de soutenir les étudiants togolais dans leur parcours académique et personnel au Havre.</p>
+                    
+                    <h3>Notre Mission</h3>
+                    <p>Nous œuvrons pour l'intégration, la défense des droits et l'épanouissement des étudiants togolais en France, tout en maintenant un esprit de dynamisme et de solidarité au sein de notre communauté.</p>
+                </div>
+                <div class="presentation-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Membres Actifs</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">10+</div>
+                        <div class="stat-label">Événements Annuels</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3+</div>
+                        <div class="stat-label">Années d'Expérience</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Nos Actions -->
+    <section id="actions" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Nos Actions</h2>
+            <div class="actions-grid">
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Réunions d'Information</h3>
+                    <p>Organisation de réunions d'informations, de concertations et de prise de décision pour maintenir une communication efficace.</p>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Micro-Projets</h3>
+                    <p>Élaboration et gestion de micro-projets pour le développement de nos membres et de la communauté.</p>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Assistance d'Urgence</h3>
+                    <p>Assistance et recours d'urgence pour les membres en difficulté.</p>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Événements Culturels</h3>
+                    <p>Participation aux organisations culturelles de l'université et organisation de festivités.</p>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-search-dollar"></i>
+                    </div>
+                    <h3>Recherche de Financement</h3>
+                    <p>Mobilisation des ressources internes et externes nécessaires à la réalisation de nos activités.</p>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-globe-africa"></i>
+                    </div>
+                    <h3>Rencontres d'Échanges</h3>
+                    <p>Rencontres d'échanges avec les associations poursuivant les mêmes objectifs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Nos Objectifs -->
+    <section id="objectifs" class="section">
+        <div class="container">
+            <h2 class="section-title">Nos Objectifs</h2>
+            <div class="objectifs-grid">
+                <div class="objectif-card">
+                    <div class="objectif-number">01</div>
+                    <h3>Intégration</h3>
+                    <p>Favoriser l'intégration des étudiants togolais dans leur nouvel environnement académique et social.</p>
+                </div>
+                <div class="objectif-card">
+                    <div class="objectif-number">02</div>
+                    <h3>Défense des Droits</h3>
+                    <p>Défendre les droits et les intérêts des étudiants togolais en France.</p>
+                </div>
+                <div class="objectif-card">
+                    <div class="objectif-number">03</div>
+                    <h3>Dynamisme</h3>
+                    <p>Susciter et maintenir chez les membres, un esprit de dynamisme de groupe.</p>
+                </div>
+                <div class="objectif-card">
+                    <div class="objectif-number">04</div>
+                    <h3>Solidarité</h3>
+                    <p>Favoriser l'union, la solidarité, l'entraide et la coopération entre les membres.</p>
+                </div>
+                <div class="objectif-card">
+                    <div class="objectif-number">05</div>
+                    <h3>Développement</h3>
+                    <p>Aider à identifier et à réfléchir sur les problèmes touchant au développement et à l'épanouissement des membres.</p>
+                </div>
+                <div class="objectif-card">
+                    <div class="objectif-number">06</div>
+                    <h3>Gestion</h3>
+                    <p>Mobiliser les ressources nécessaires et veiller à la bonne gestion des activités de l'association.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Conseil d'Administration -->
+    <section id="conseil" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Conseil d'Administration</h2>
+            
+            <!-- Bureau Exécutif -->
+            <div class="conseil-section">
+                <h3 class="conseil-subtitle">Le Bureau Exécutif</h3>
+                <div class="membres-grid" id="bureau-executif">
+                    <!-- Les membres seront ajoutés dynamiquement -->
+                </div>
+                <button class="btn btn-primary admin-only" onclick="openMemberForm('bureau-executif')" style="display: none;">
+                    <i class="fas fa-plus"></i> Ajouter un Membre
+                </button>
+            </div>
+
+            <!-- Les Conseillers -->
+            <div class="conseil-section">
+                <h3 class="conseil-subtitle">Les Conseillers</h3>
+                <div class="membres-grid" id="conseillers">
+                    <!-- Les membres seront ajoutés dynamiquement -->
+                </div>
+                <button class="btn btn-primary admin-only" onclick="openMemberForm('conseillers')" style="display: none;">
+                    <i class="fas fa-plus"></i> Ajouter un Membre
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Culture du Togo -->
+    <section id="culture" class="section">
+        <div class="container">
+            <h2 class="section-title">Culture du Togo</h2>
+            <div class="culture-content">
+                <div class="culture-intro">
+                    <p>Découvrez la richesse culturelle du Togo à travers ses traditions, son histoire et ses valeurs. Cette section est enrichie avec des images et des textes détaillés sur la culture togolaise.</p>
+                </div>
+                <div class="culture-placeholder">
+                    <div class="placeholder-content">
+                        <i class="fas fa-image"></i>
+                        <h3>Contenu</h3>
+                    </div>
+                </div>
+                <div class="culture-admin admin-only" style="display: none;">
+                    <button class="btn btn-primary" onclick="openCultureForm()">
+                        <i class="fas fa-plus"></i> Ajouter du Contenu Culturel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Adhésion -->
+    <section id="adhesion" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Devenir Membre</h2>
+            <div class="adhesion-content">
+                <div class="adhesion-info">
+                    <h3>Conditions d'Adhésion</h3>
+                    <ul>
+                        <li>Être togolais.e de nationalité ou d'origine</li>
+                        <li>Avoir effectué tout ou une partie de ses études sur le sol français plus précisément au Havre</li>
+                        <li>Être de bonne moralité</li>
+                    </ul>
+                    
+                    <h3>Modalités</h3>
+                    <ul>
+                        <li>Adhésion gratuite</li>
+                        <li>Remplir une fiche d'adhésion</li>
+                        <li>S'acquitter de la cotisation annuelle (montant à définir)</li>
+                    </ul>
+
+                    <h3>Avantages</h3>
+                    <ul>
+                        <li>Assister gratuitement aux ateliers et formations</li>
+                        <li>Solliciter plus rapidement l'assistance de l'association</li>
+                        <li>Développer son réseau</li>
+                        <li>Et bien plus encore...</li>
+                    </ul>
+                </div>
+                <div class="adhesion-form-container">
+                    <button class="btn btn-primary btn-large" onclick="openAdhesionForm()">
+                        <i class="fas fa-user-plus"></i> Formulaire d'Adhésion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Événements -->
+    <section id="evenements" class="section">
+        <div class="container">
+            <h2 class="section-title">Nos Événements</h2>
+            <div class="evenements-grid" id="evenements-container">
+                <!-- Les événements seront ajoutés dynamiquement -->
+            </div>
+            <div class="evenements-actions">
+                <button class="btn btn-primary admin-only" onclick="openEventForm()" style="display: none;">
+                    <i class="fas fa-plus"></i> Ajouter un Événement
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Contact -->
+    <section id="contact" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Nous Contacter</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item" id="contact-address">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Adresse</h4>
+                            <p id="contact-address-text">Le Havre, France</p>
+                            <button class="edit-contact-btn admin-only" onclick="editContactInfo('address')">
+                                <i class="fas fa-edit"></i> Modifier
+                            </button>
+                        </div>
+                    </div>
+                    <div class="contact-item" id="contact-email">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p id="contact-email-text">assetoh228@gmail.com</p>
+                            <button class="edit-contact-btn admin-only" onclick="editContactInfo('email')">
+                                <i class="fas fa-edit"></i> Modifier
+                            </button>
+                        </div>
+                    </div>
+                    <div class="contact-item" id="contact-phone">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Téléphone</h4>
+                            <p id="contact-phone-text">+33 XX XX XX XX XX</p>
+                            <button class="edit-contact-btn admin-only" onclick="editContactInfo('phone')">
+                                <i class="fas fa-edit"></i> Modifier
+                            </button>
+                        </div>
+                    </div>
+                    <div class="contact-item" id="contact-facebook">
+                        <i class="fab fa-facebook"></i>
+                        <div>
+                            <h4>Facebook</h4>
+                            <p id="contact-facebook-text">ASSETOH Le Havre</p>
+                            <button class="edit-contact-btn admin-only" onclick="editContactInfo('facebook')">
+                                <i class="fas fa-edit"></i> Modifier
+                            </button>
+                        </div>
+                    </div>
+                    <div class="contact-item" id="contact-instagram">
+                        <i class="fab fa-instagram"></i>
+                        <div>
+                            <h4>Instagram</h4>
+                            <p id="contact-instagram-text">@assetoh</p>
+                            <button class="edit-contact-btn admin-only" onclick="editContactInfo('instagram')">
+                                <i class="fas fa-edit"></i> Modifier
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-container">
+                    <button class="btn btn-primary btn-large" onclick="openContactForm()">
+                        <i class="fas fa-envelope"></i> Formulaire de Contact
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="assetoh_logo.jpeg" alt="ASSETOH Logo" class="footer-logo-image">
+                        <div class="footer-logo-text">
+                            <h3>ASSETOH</h3>
+                            <p>Association des Etudiants Togolais au Havre</p>
+                        </div>
+                    </div>
+                    <p>Consolidons ensemble les liens de fraternité et d'entraide</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Liens Rapides</h4>
+                    <ul>
+                        <li><a href="#presentation">Présentation</a></li>
+                        <li><a href="#actions">Nos Actions</a></li>
+                        <li><a href="#adhesion">Adhésion</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Suivez-nous</h4>
+                    <div class="social-links">
+                        <a href="#" id="social-facebook" target="_blank" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" id="social-instagram" target="_blank" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" id="social-linkedin" target="_blank" title="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" id="social-youtube" target="_blank" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                    <div class="social-links-admin admin-only" style="margin-top: 1rem;">
+                        <button class="edit-social-btn" onclick="editSocialLinks()">
+                            <i class="fas fa-edit"></i> Modifier les liens sociaux
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 ASSETOH. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMemberForm()">&times;</span>
+            <h2>Ajouter un Membre</h2>
+            <form id="memberForm">
+                <div class="form-group">
+                    <label for="memberName">Nom et Prénom *</label>
+                    <input type="text" id="memberName" required>
+                </div>
+                <div class="form-group">
+                    <label for="memberPoste">Poste *</label>
+                    <input type="text" id="memberPoste" required>
+                </div>
+                <div class="form-group">
+                    <label for="memberPhoto">Photo</label>
+                    <input type="file" id="memberPhoto" accept="image/*" class="form-control">
+                    <small>Formats acceptés : JPG, PNG, GIF (max 5MB)</small>
+                </div>
+                <div class="form-group">
+                    <label for="memberSection">Section *</label>
+                    <select id="memberSection" required>
+                        <option value="bureau-executif">Bureau Exécutif</option>
+                        <option value="conseillers">Conseillers</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="adhesionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAdhesionForm()">&times;</span>
+            <h2>Formulaire d'Adhésion</h2>
+            <form id="adhesionForm">
+                <div class="form-group">
+                    <label for="adhesionName">Nom et Prénom *</label>
+                    <input type="text" id="adhesionName" required>
+                </div>
+                <div class="form-group">
+                    <label for="adhesionEmail">Email *</label>
+                    <input type="email" id="adhesionEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="adhesionPhone">Téléphone</label>
+                    <input type="tel" id="adhesionPhone">
+                </div>
+                <div class="form-group">
+                    <label for="adhesionNationality">Nationalité *</label>
+                    <input type="text" id="adhesionNationality" required>
+                </div>
+                <div class="form-group">
+                    <label for="adhesionStudies">Études actuelles *</label>
+                    <textarea id="adhesionStudies" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="adhesionMotivation">Motivation pour rejoindre l'association *</label>
+                    <textarea id="adhesionMotivation" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Envoyer la Demande</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeContactForm()">&times;</span>
+            <h2>Formulaire de Contact</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="contactName">Nom et Prénom *</label>
+                    <input type="text" id="contactName" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Email *</label>
+                    <input type="email" id="contactEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactSubject">Sujet *</label>
+                    <input type="text" id="contactSubject" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactMessage">Message *</label>
+                    <textarea id="contactMessage" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Envoyer le Message</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEventForm()">&times;</span>
+            <h2>Ajouter un Événement</h2>
+            <form id="eventForm">
+                <div class="form-group">
+                    <label for="eventTitle">Titre de l'Événement *</label>
+                    <input type="text" id="eventTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventDate">Date *</label>
+                    <input type="date" id="eventDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="eventTime">Heure</label>
+                    <input type="time" id="eventTime">
+                </div>
+                <div class="form-group">
+                    <label for="eventLocation">Lieu</label>
+                    <input type="text" id="eventLocation">
+                </div>
+                <div class="form-group">
+                    <label for="eventDescription">Description *</label>
+                    <textarea id="eventDescription" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Ajouter l'Événement</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Administration -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAdminModal()">&times;</span>
+            <h2>Mode Administration</h2>
+            <div class="admin-login">
+                <p>Entrez vos identifiants d'administration :</p>
+                <div class="form-group">
+                    <label for="adminEmail">Email *</label>
+                    <input type="email" id="adminEmail" placeholder="Entrez votre email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Mot de passe *</label>
+                    <input type="password" id="adminPassword" placeholder="Mot de passe" class="form-control" required>
+                </div>
+                <button onclick="loginAdmin()" class="btn btn-primary">Se connecter</button>
+                <button onclick="closeAdminModal()" class="btn btn-secondary">Annuler</button>
+            </div>
+            <div class="admin-panel" style="display: none;">
+                <h3>Panneau d'Administration</h3>
+                <p><strong>Email admin :</strong> franceassetoh228@gmail.com</p>
+                <div class="admin-actions">
+                    <button onclick="logoutAdmin()" class="btn btn-secondary">Se déconnecter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Édition Contact -->
+    <div id="editContactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditContactModal()">&times;</span>
+            <h2>Modifier les Informations de Contact</h2>
+            <form id="editContactForm">
+                <div class="form-group">
+                    <label for="editContactType">Type d'Information</label>
+                    <input type="text" id="editContactType" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="editContactValue">Nouvelle Valeur *</label>
+                    <input type="text" id="editContactValue" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="button" onclick="closeEditContactModal()" class="btn btn-secondary">Annuler</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Édition Membre -->
+    <div id="editMemberModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditMemberModal()">&times;</span>
+            <h2>Modifier un Membre</h2>
+            <form id="editMemberForm">
+                <div class="form-group">
+                    <label for="editMemberName">Nom et Prénom *</label>
+                    <input type="text" id="editMemberName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editMemberPoste">Poste *</label>
+                    <input type="text" id="editMemberPoste" required>
+                </div>
+                <div class="form-group">
+                    <label for="editMemberPhoto">Nouvelle Photo</label>
+                    <input type="file" id="editMemberPhoto" accept="image/*" class="form-control">
+                    <small>Formats acceptés : JPG, PNG, GIF (max 5MB)</small>
+                </div>
+                <div class="form-group">
+                    <label for="editMemberSection">Section *</label>
+                    <select id="editMemberSection" required>
+                        <option value="bureau-executif">Bureau Exécutif</option>
+                        <option value="conseillers">Conseillers</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editMemberDescription">Description</label>
+                    <textarea id="editMemberDescription" rows="3" placeholder="Description optionnelle..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer les Modifications</button>
+                <button type="button" onclick="closeEditMemberModal()" class="btn btn-secondary">Annuler</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Édition Événement -->
+    <div id="editEventModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditEventModal()">&times;</span>
+            <h2>Modifier un Événement</h2>
+            <form id="editEventForm">
+                <div class="form-group">
+                    <label for="editEventTitle">Titre de l'Événement *</label>
+                    <input type="text" id="editEventTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEventDate">Date *</label>
+                    <input type="date" id="editEventDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEventTime">Heure</label>
+                    <input type="time" id="editEventTime">
+                </div>
+                <div class="form-group">
+                    <label for="editEventLocation">Lieu</label>
+                    <input type="text" id="editEventLocation">
+                </div>
+                <div class="form-group">
+                    <label for="editEventDescription">Description *</label>
+                    <textarea id="editEventDescription" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer les Modifications</button>
+                <button type="button" onclick="closeEditEventModal()" class="btn btn-secondary">Annuler</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Édition Contenu Culturel -->
+    <div id="editCultureModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditCultureModal()">&times;</span>
+            <h2>Modifier le Contenu Culturel</h2>
+            <form id="editCultureForm">
+                <div class="form-group">
+                    <label for="editCultureTitle">Titre *</label>
+                    <input type="text" id="editCultureTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCultureCategory">Catégorie *</label>
+                    <select id="editCultureCategory" required>
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="histoire">Histoire</option>
+                        <option value="traditions">Traditions</option>
+                        <option value="cuisine">Cuisine</option>
+                        <option value="art">Art et Culture</option>
+                        <option value="geographie">Géographie</option>
+                        <option value="langues">Langues</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editCultureImage">Nouvelle Image</label>
+                    <input type="file" id="editCultureImage" accept="image/*" class="form-control">
+                    <small>Formats acceptés : JPG, PNG, GIF (max 5MB)</small>
+                </div>
+                <div class="form-group">
+                    <label for="editCultureDescription">Description *</label>
+                    <textarea id="editCultureDescription" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editCultureContent">Contenu Détaillé</label>
+                    <textarea id="editCultureContent" rows="6" placeholder="Contenu plus détaillé sur ce sujet culturel..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer les Modifications</button>
+                <button type="button" onclick="closeEditCultureModal()" class="btn btn-secondary">Annuler</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Édition Liens Sociaux -->
+    <div id="editSocialModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditSocialModal()">&times;</span>
+            <h2>Modifier les Liens Sociaux</h2>
+            <form id="editSocialForm">
+                <div class="form-group">
+                    <label for="editSocialFacebook">Facebook</label>
+                    <input type="url" id="editSocialFacebook" placeholder="https://facebook.com/assetoh" pattern="https?://.+">
+                    <small>Laissez vide pour désactiver le lien</small>
+                </div>
+                <div class="form-group">
+                    <label for="editSocialInstagram">Instagram</label>
+                    <input type="url" id="editSocialInstagram" placeholder="https://instagram.com/assetoh" pattern="https?://.+">
+                    <small>Laissez vide pour désactiver le lien</small>
+                </div>
+                <div class="form-group">
+                    <label for="editSocialLinkedin">LinkedIn</label>
+                    <input type="url" id="editSocialLinkedin" placeholder="https://linkedin.com/company/assetoh" pattern="https?://.+">
+                    <small>Laissez vide pour désactiver le lien</small>
+                </div>
+                <div class="form-group">
+                    <label for="editSocialYoutube">YouTube</label>
+                    <input type="url" id="editSocialYoutube" placeholder="https://youtube.com/@assetoh" pattern="https?://.+">
+                    <small>Laissez vide pour désactiver le lien</small>
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer les Liens</button>
+                <button type="button" onclick="closeEditSocialModal()" class="btn btn-secondary">Annuler</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Contenu Culturel -->
+    <div id="cultureModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCultureForm()">&times;</span>
+            <h2>Ajouter du Contenu Culturel</h2>
+            <form id="cultureForm">
+                <div class="form-group">
+                    <label for="cultureTitle">Titre *</label>
+                    <input type="text" id="cultureTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="cultureCategory">Catégorie *</label>
+                    <select id="cultureCategory" required>
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="histoire">Histoire</option>
+                        <option value="traditions">Traditions</option>
+                        <option value="cuisine">Cuisine</option>
+                        <option value="art">Art et Culture</option>
+                        <option value="geographie">Géographie</option>
+                        <option value="langues">Langues</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cultureImage">Image</label>
+                    <input type="file" id="cultureImage" accept="image/*" class="form-control">
+                    <small>Formats acceptés : JPG, PNG, GIF (max 5MB)</small>
+                </div>
+                <div class="form-group">
+                    <label for="cultureDescription">Description *</label>
+                    <textarea id="cultureDescription" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="cultureContent">Contenu Détaillé</label>
+                    <textarea id="cultureContent" rows="6" placeholder="Contenu plus détaillé sur ce sujet culturel..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Ajouter le Contenu</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("P7BXkQJgBk2lqXboL");
+        })();
+    </script>
+    <script src="script.js?v=1.1"></script>
+</body>
+</html>
