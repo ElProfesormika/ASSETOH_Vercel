@@ -2,10 +2,10 @@
   "name": "assetoh-website",
   "version": "1.0.0",
   "description": "Site web officiel de l'ASSETOH - Association des Étudiants Togolais au Havre",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
-    "start": "npx http-server -p $PORT -o",
-    "dev": "npx http-server -p 3000 -o",
+    "start": "node server.js",
+    "dev": "node server.js",
     "build": "echo 'Build completed'",
     "test": "echo 'No tests specified'"
   },
@@ -20,7 +20,7 @@
   "author": "ASSETOH",
   "license": "MIT",
   "dependencies": {
-    "http-server": "^14.1.1"
+    "express": "^4.18.2"
   },
   "engines": {
     "node": ">=16.0.0"
